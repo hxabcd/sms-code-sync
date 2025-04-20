@@ -1,0 +1,22 @@
+{
+    "regex": {
+        "code": "\\d{4,8}",
+        "sender": "[\\[【](.*?)[\\]】]"
+    }
+    "mail_providers": [
+        "com.android.email", 
+        "com.microsoft.office.outlook",
+        "com.google.android.gm",
+        "com.netease.mail",
+        "com.tencent.androidqqmail",
+        "net.thunderbird.android"
+    ],
+    "profiles": [
+        {
+            "name": "PROFILE_NAME",
+            "secret": "TOTP_SECRET",
+            "window": 180,
+            "maxlen": 3
+        }
+    ]
+}
