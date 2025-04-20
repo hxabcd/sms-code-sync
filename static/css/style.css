@@ -1,22 +1,28 @@
 :root {
     --primary-color: #007bff;
     --primary-hover-color: #0056b3;
+    --priamry-disabled-color: #5599cc;
     --background-color: #f4f4f4;
     --text-color: #000;
     --card-background: #fff;
     --card-shadow: rgba(0, 0, 0, 0.1);
     --input-border: #ccc;
+    --success-color: #80da58;
+    --success-hover-color: #6bb849;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --primary-color: #1e90ff;
         --primary-hover-color: #1c86ee;
+        --priamry-disabled-color: #0c44a7;
         --background-color: #121212;
         --text-color: #fff;
         --card-background: #1e1e1e;
         --card-shadow: rgba(255, 255, 255, 0.1);
         --input-border: #444;
+        --success-color: #80da58;
+        --success-hover-color: #6bb849;
     }
 }
 
@@ -140,7 +146,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
     padding: 20px;
     background: var(--card-background);
     border-radius: 10px;
@@ -177,23 +183,38 @@ body {
     color: var(--text-color);
 }
 
-#verification-section button {
+#verify-button {
     padding: 10px 20px;
     font-size: 16px;
-    background: var(--primary-color);
     color: white;
     border: none;
     border-radius: 5px;
+    transition: background-color ease 0.25s;
+}
+
+#verification-section:has(#totp-input:valid) #verify-button {
+    background: var(--primary-color);
     cursor: pointer;
 }
 
-#verification-section button:hover {
+#verification-section:has(#totp-input:valid) #verify-button:hover {
     background-color: var(--primary-hover-color);
+    cursor: pointer;
+}
+
+#verification-section:not(:has(#totp-input:valid)) #verify-button {
+    background-color: var(--priamry-disabled-color);
+    cursor: not-allowed;
 }
 
 #verification-message {
     color: var(--primary-hover-color);
     font-size: 14px;
+}
+
+#verification-message {
+    height: 1ch;
+    text-align: center;
 }
 
 #code-section {
@@ -206,7 +227,7 @@ body {
     left: 0;
     height: 4px;
     background: var(--primary-color);
-    width: 0%;
+    width: 0;
     transition: width 0.5s ease;
 }
 
@@ -216,6 +237,7 @@ body {
     bottom: 20px;
     display: flex;
 }
+
 #profile-info-card label {
     margin-right: 8px;
 }

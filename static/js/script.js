@@ -13,9 +13,6 @@ let profiles = [];
 let verified = false;
 let verified_profile = '';
 
-// 后端 API
-const API_DOMAIN = 'https://api.xxtsoft.top/sms'
-
 // 时间格式化函数
 function formatTimestamp(timestamp) {
   const date = new Date(timestamp * 1000);
@@ -26,19 +23,19 @@ function formatTimestamp(timestamp) {
 // 获取可用的用户配置
 async function fetchProfiles() {
   try {
-    const response = await fetch(`${API_DOMAIN}/sms/list-profiles`);
-    if (!response.ok) {
-      throw new Error(`获取用户配置失败，状态码：${response.status}`);
+    const response = await fetch('/list-profiles');
+    if (response.ok) {
+      profiles = await response.json();
+      console.log('Profiles:', profiles);
+      profiles.forEach((profile) => {
+        const option = document.createElement('option');
+        option.value = profile;
+        option.textContent = profile;
+        profileSelect.appendChild(option);
+      });
+    } else {
+      console.error(`获取用户配置失败，状态码：${response.status}`);
     }
-    profiles = await response.json();
-    console.log('Profiles:', profiles);
-    //在下拉框中显示
-    profiles.forEach((profile) => {
-      const option = document.createElement('option');
-      option.value = profile;
-      option.textContent = profile;
-      profileSelect.appendChild(option);
-    });
   } catch (error) {
     console.error('Error fetching profiles:', error);
   }
@@ -60,27 +57,28 @@ async function checkVerifiedForEach() {
 async function checkVerified(profile) {
   console.log(`Checking verification status for profile: ${profile}`);
   try {
-    const response = await fetch(`${API_DOMAIN}/check-verified?profile=${profile}`, { credentials: 'include' });
-    if (!response.ok) {
-      throw new Error(`检查验证状态失败，状态码：${response.status}`);
-    }
-    const data = await response.json();
-    if (data.status) {
-      console.log(`Verified for profile: ${profile}`);
-      verified = true;
-      verified_profile = profile;
-      verificationSection.style.display = 'none';
-      codeSection.style.display = 'block';
-      profileInfo.style.display = 'block';
-      profileLabel.textContent = profile;
-      fetchCodes();
+    const response = await fetch(`/check-verified?profile=${profile}`, { credentials: 'include' });
+    if (response.ok) {
+      const data = await response.json();
+      if (data.status) {
+        console.log(`Verified for profile: ${profile}`);
+        verified = true;
+        verified_profile = profile;
+        verificationSection.style.display = 'none';
+        codeSection.style.display = 'block';
+        profileInfo.style.display = 'block';
+        profileLabel.textContent = profile;
+        fetchCodes();
+      } else {
+        console.log(`Can not verify for profile: ${profile}`);
+        verified = false;
+        verificationSection.style.display = 'flex';
+        codeSection.style.display = 'none';
+        profileInfo.style.display = 'none';
+        profileLabel.textContent = '';
+      }
     } else {
-      console.log(`Can not verify for profile: ${profile}`);
-      verified = false;
-      verificationSection.style.display = 'flex';
-      codeSection.style.display = 'none';
-      profileInfo.style.display = 'none';
-      profileLabel.textContent = '';
+      console.error(`检查验证状态失败，状态码：${response.status}`);
     }
   } catch (error) {
     console.error('Error checking verification status:', error);
@@ -91,14 +89,14 @@ async function checkVerified(profile) {
 async function verifyTotp() {
   const profile = profileSelect.value;
   const totp = totpInput.value;
-  if (!totp || totp.length !== 6) {
-    verificationMessage.textContent = '请输入有效的6位验证码';
+  if (!totp || totp.length !== 6 || !/[0-9]{6}/.test(totp)) {
+    verificationMessage.textContent = '请输入有效的验证码';
     return;
   }
 
   console.log(`Verifying for profile: ${profile} with TOTP: ${totp}`);
   try {
-    const response = await fetch(`${API_DOMAIN}/verify`, {
+    const response = await fetch('/verify', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -143,7 +141,7 @@ async function fetchCodes() {
   }, 1000); 
 
   try {
-    const response = await fetch(`${API_DOMAIN}/get-codes?profile=${verified_profile}`, { credentials: 'include' });
+    const response = await fetch(`/get-codes?profile=${verified_profile}`, { credentials: 'include' });
     if (response.status === 403) {
       checkVerified(verified_profile);
       return;
@@ -161,7 +159,7 @@ async function fetchCodes() {
 // 注销登录
 async function logout() {
   try {
-    const response = await fetch(`${API_DOMAIN}/logout?profile=${verified_profile}`, { credentials: 'include' });
+    const response = await fetch(`/logout?profile=${verified_profile}`, { credentials: 'include' });
     if (response.ok) {
       checkVerified(verified_profile)
     } else {

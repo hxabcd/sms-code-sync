@@ -2,32 +2,41 @@
 The backend of SMS Code Sync
 Repo: https://github.com/hxabcd/sms-code-sync
 """
-
 import json
+import logging
 import os
 import re
 import time
 import typing
 from collections import deque
-from uuid import uuid4 as uuidgen
+from dataclasses import dataclass, field
+from uuid import uuid4 as uuid_gen
 
 import pyotp
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
+
+@dataclass
 class Profile:
     """用户配置，用于存储验证码并处理身份验证"""
-    def __init__(self, name: str, secret: str, window: int, maxlen: int):
-        self.name = name
-        self.secret = secret
-        self.totp = pyotp.TOTP(secret)
-        self.window = window
-        self.codes = deque(maxlen=maxlen)
-        self.last_verified: typing.Dict[str, int] = {}
+    name: str
+    secret: str
+    window: int
+    maxlength: int
+    totp: pyotp.TOTP = field(init=False)
+    codes: deque = field(init=False)
+    last_verified: typing.Dict[str, int] = field(default_factory=dict)
+
+    def __post_init__(self):
+        self.totp = pyotp.TOTP(self.secret)
+        self.codes = deque(maxlen=self.maxlength)
 
     def check_verified(self, uuid: str):
         """检查 UUID 是否已验证"""
@@ -54,24 +63,24 @@ class Profile:
 profiles: typing.Dict[str, Profile] = {}
 
 # 读取配置文件
-with open("config.json", "r", encoding="utf-8") as config_file:
-    config = json.load(config_file)
-    MAIL_PROVIDERS = config["mail_providers"]  # 邮箱发送者
-    # 正则表达式
-    REGEX_CODE = config["regex"]["code"]  # 提取验证码
-    REGEX_SENDER = config["regex"]["sender"]  # 提取发送者
-    # 用户配置
-    for item in config["profiles"]:
-        name = item.get("name")
-        secret = item.get("secret")
-        window = item.get("window", 180)
-        maxlen = item.get("maxlen", 3)
-        profiles[name] = Profile(name, secret, window, maxlen)
+with open("config.json", encoding="utf-8") as f:
+    config = json.load(f)
+MAIL_PROVIDERS = config["mail_providers"]  # 邮箱发送者
+# 正则表达式
+REGEX_CODE = config["regex"]["code"]  # 提取验证码
+REGEX_SENDER = config["regex"]["sender"]  # 提取发送者
+# 用户配置
+for item in config["profiles"]:
+    name = item.get("name")
+    secret = item.get("secret")
+    window = item.get("window", 180)
+    maxlength = item.get("maxlength", 3)
+    profiles[name] = Profile(name, secret, window, maxlength)
 
 
-def get_uuid(request):
+def get_uuid(user_request: request) -> str:
     """从 Cookies 获取或生成 UUID"""
-    return request.cookies.get("uuid", str(uuidgen()))
+    return user_request.cookies.get("uuid", str(uuid_gen()))
 
 
 @app.route("/list-profiles", methods=["GET"])
@@ -231,8 +240,9 @@ def clear_codes():
 
 @app.route("/")
 def index():
-    """默认页"""
-    return f"Server is running on port {os.getenv('PORT')}"
+    """主页"""
+    return render_template("index.html", title="首页")
+
 
 @app.route("/health")
 def health_check():
@@ -242,6 +252,7 @@ def health_check():
         "system_time": time.strftime('%H:%M:%S'),
         "profiles_loaded": len(profiles)
     }), 200
+
 
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=os.getenv("PORT"))

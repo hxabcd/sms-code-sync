@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>验证码同步</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+</head>
+
+<body>
+<div id="progress-bar"></div>
+<div id="main">
+    <div id="verification-section">
+        <h2>验证您的身份</h2>
+        <p>输入 TOTP 验证码以继续</p>
+        <div id="profile-select-container">
+            <label for="profile-select">用户配置</label>
+            <select id="profile-select"></select>
+        </div>
+        <div id="totp-input-container">
+            <label for="totp-input">验证代码</label>
+            <input type="text" inputmode="numeric" id="totp-input" required pattern="[0-9]{6}" minlength=6 maxlength=6
+                   placeholder="输入六位验证码">
+        </div>
+        <p id="verification-message"></p>
+        <button id="verify-button">验证</button>
+    </div>
+    <div id="code-section"></div>
+</div>
+<div id="profile-info-card" style="display: none;">
+    <label id="profile-label"></label>
+    <button id="logout-button">
+        <i class="fas fa-sign-out"></i> 注销
+    </button>
+</div>
+
+<script src="../static/js/script.js" defer></script>
+</body>
+
+</html>
