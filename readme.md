@@ -105,4 +105,3 @@ Fork 本仓库（记得设为 Private），并修改好配置文件，然后在�
 
 * Flask
 * pyotp
-* 
