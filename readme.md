@@ -52,7 +52,9 @@ docker run -d \
 
 - `-e PORT=5000` 设置应用运行端口（可选，默认为 5000）
 
-  **请确保你设置的端口和 Docker 的端口映射相互照应**，这里的端口设置适用于为 Docker 配置 host 网络模式时使用，因为使用 host 网络模式时 Docker 的端口映射无效
+  **端口配置说明：**
+  - 默认情况下，需要确保此环境变量设置的端口与 `-p` 参数映射的端口一致
+  - 如果使用 `--network=host` 模式运行容器，则此端口设置应与系统实际开放的端口对应
 
 - `-v /var/app/config:/opt/sms-code-sync/config.json` 挂载配置文件
 
@@ -79,23 +81,23 @@ docker run -d \
 ```json5
 {
     "regex": {
-        "code": "\\d{4,8}", // 从短信内容中匹配验证码的正则表达式
-        "sender": "[\\[【](.*?)[\\]】]" // 从短信内容中匹配发送者的正则表达式
+        "code": "\\d{4,8}", /* 从短信内容中匹配验证码的正则表达式 */
+        "sender": "[\\[【](.*?)[\\]】]" /* 从短信内容中匹配发送者的正则表达式 */
     },
-    "mail_providers": [ // 邮件验证码的发送源（包名）
+    "mail_providers": [ /* 邮件验证码的发送源（包名） */
         "com.android.email", 
         "com.microsoft.office.outlook",
         "com.google.android.gm",
         "com.netease.mail",
         "com.tencent.androidqqmail",
         "net.thunderbird.android"
-    },
-    "profiles": [ // 用户档案，可存在多个
+    ],
+    "profiles": [ /* 用户档案，可存在多个 */
         {
-            "name": "NAME", // 档案名
-            "secret": "TOTP_SECRET", // TOTP 密钥
-            "window": 180, // 单次登录有效窗口时长
-            "maxlen": 3 // 最大同时存储的验证码条数
+            "name": "NAME", /* 档案名 */
+            "secret": "TOTP_SECRET", /* TOTP 密钥 */
+            "window": 180, /* 单次登录有效窗口时长 */
+            "maxlen": 3 /* 最大同时存储的验证码条数 */
         }
     ]
 }
