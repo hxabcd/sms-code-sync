@@ -31,11 +31,15 @@ Fork 本仓库，并修改好配置文件，然后在对应平台选择你的仓
 ```bash
 # 从 GHCR 拉取镜像
 docker pull ghcr.io/hxabcd/sms-code-sync:latest
+
+# 如果你的网络连接 GHCR 很慢，可以从南京大学镜像站拉取
+docker pull ghcr.nju.edu.cn/hxabcd/sms-code-sync:latest
 ```
 
 然后运行容器，需要设置环境变量并挂载配置文件：
 
 ```bash
+# 如果你从 GHCR 拉取镜像，请使用 `ghcr.io/hxabcd/sms-code-sync:latest`：
 docker run -d \
   --name sms-code-sync \
   -p 5000:5000 \
@@ -43,6 +47,15 @@ docker run -d \
   -e PORT=5000 \
   -v /var/app/config:/opt/sms-code-sync/config.json \
   ghcr.io/hxabcd/sms-code-sync:latest
+
+  # 如果你从南京大学镜像站拉取镜像，请使用 `ghcr.nju.edu.cn/hxabcd/sms-code-sync:latest`：
+docker run -d \
+  --name sms-code-sync \
+  -p 5000:5000 \
+  -e TZ=Asia/Shanghai \
+  -e PORT=5000 \
+  -v /var/app/config:/opt/sms-code-sync/config.json \
+  ghcr.nju.edu.cn/hxabcd/sms-code-sync:latest
 ```
 
 参数说明：
