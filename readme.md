@@ -26,16 +26,11 @@ Fork 本仓库，并修改好配置文件，然后在对应平台选择你的仓
 
 #### 使用 Docker 部署
 
-你也可以使用 Docker 来部署本应用。首先构建镜像或从 GHCR 拉取镜像：
+你也可以使用 Docker 来部署本应用。镜像中已包含 Gunicorn 作为 WSGI 服务器，用于生产环境部署。首先从 GHCR 拉取镜像：
 
 ```bash
 # 从 GHCR 拉取镜像
-docker pull ghcr.io/你的用户名/sms-code-sync:latest
-
-# 或者自己构建镜像
-docker build -t sms-code-sync .
-
-# 这两个命令任选其一即可
+docker pull ghcr.io/hxabcd/sms-code-sync:latest
 ```
 
 然后运行容器，需要设置环境变量并挂载配置文件：
@@ -52,8 +47,13 @@ docker run -d \
 
 参数说明：
 - `-p 5000:5000` 将容器的 5000 端口映射到主机的 5000 端口
+
 - `-e TZ=Asia/Shanghai` 设置时区（可选，默认为 Asia/Shanghai）
+
 - `-e PORT=5000` 设置应用运行端口（可选，默认为 5000）
+
+  **请确保你设置的端口和 Docker 的端口映射相互照应**，这里的端口设置适用于为 Docker 配置 host 网络模式时使用，因为使用 host 网络模式时 Docker 的端口映射无效
+
 - `-v /var/app/config:/opt/sms-code-sync/config.json` 挂载配置文件
 
 注意：由于配置文件在运行目录的根目录，如果挂载整个目录会导致程序无法运行，所以需要单独挂载配置文件。
@@ -89,7 +89,7 @@ docker run -d \
         "com.netease.mail",
         "com.tencent.androidqqmail",
         "net.thunderbird.android"
-    ],
+    },
     "profiles": [ // 用户档案，可存在多个
         {
             "name": "NAME", // 档案名
