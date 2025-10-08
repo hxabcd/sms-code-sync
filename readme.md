@@ -41,7 +41,7 @@ docker pull ghcr.nju.edu.cn/hxabcd/sms-code-sync:latest
 ```bash
 # 如果你从 GHCR 拉取镜像，请使用 `ghcr.io/hxabcd/sms-code-sync:latest`：
 docker run -d \
-  --name sms-code-sync \
+  --SMS-Code-Sync \
   -p 5000:5000 \
   -e TZ=Asia/Shanghai \
   -e PORT=5000 \
@@ -50,7 +50,7 @@ docker run -d \
 
   # 如果你从南京大学镜像站拉取镜像，请使用 `ghcr.nju.edu.cn/hxabcd/sms-code-sync:latest`：
 docker run -d \
-  --name sms-code-sync \
+  --SMS-Code-Sync \
   -p 5000:5000 \
   -e TZ=Asia/Shanghai \
   -e PORT=5000 \
