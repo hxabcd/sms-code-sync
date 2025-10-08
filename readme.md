@@ -45,7 +45,7 @@ docker run -d \
   -p 5000:5000 \
   -e TZ=Asia/Shanghai \
   -e PORT=5000 \
-  -v /var/app/config:/opt/sms-code-sync/config.json \
+  -v /opt/sms-code-sync/config.json:/var/app/config.json \
   ghcr.io/hxabcd/sms-code-sync:latest
 
   # 如果你从南京大学镜像站拉取镜像，请使用 `ghcr.nju.edu.cn/hxabcd/sms-code-sync:latest`：
@@ -54,7 +54,7 @@ docker run -d \
   -p 5000:5000 \
   -e TZ=Asia/Shanghai \
   -e PORT=5000 \
-  -v /var/app/config:/opt/sms-code-sync/config.json \
+  -v /opt/sms-code-sync/config.json:/var/app/config.json \
   ghcr.nju.edu.cn/hxabcd/sms-code-sync:latest
 ```
 
