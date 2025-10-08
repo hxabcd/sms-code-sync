@@ -1,6 +1,7 @@
 FROM alpine:latest
 
-# 设置时区
+# 设置默认端口和时区
+ENV PORT=5000
 ENV TZ=Asia/Shanghai
 
 # 安装依赖包
@@ -34,9 +35,12 @@ WORKDIR /tmp
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
+# 安装 Gunicorn 作为 WSGI 服务器
+RUN pip install gunicorn
+
 # 复制项目文件
 WORKDIR /var/app
 COPY . /var/app
 
-# 启动应用
-CMD ["python", "./main.py"]
+# 使用 Gunicorn 启动应用
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT --workers 4 main:app"]
