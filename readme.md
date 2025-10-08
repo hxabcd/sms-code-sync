@@ -24,6 +24,40 @@ SMS Code Sync 为了解决**远程接收验证码**的困难应运而生。本�
 
 Fork 本仓库，并修改好配置文件，然后在对应平台选择你的仓库进行部署。
 
+#### 使用 Docker 部署
+
+你也可以使用 Docker 来部署本应用。首先构建镜像或从 GHCR 拉取镜像：
+
+```bash
+# 从 GHCR 拉取镜像
+docker pull ghcr.io/你的用户名/sms-code-sync:latest
+
+# 或者自己构建镜像
+docker build -t sms-code-sync .
+
+# 这两个命令任选其一即可
+```
+
+然后运行容器，需要设置环境变量并挂载配置文件：
+
+```bash
+docker run -d \
+  --name sms-code-sync \
+  -p 5000:5000 \
+  -e TZ=Asia/Shanghai \
+  -e PORT=5000 \
+  -v /var/app/config:/opt/sms-code-sync/config.json \
+  ghcr.io/你的用户名/sms-code-sync:latest
+```
+
+参数说明：
+- `-p 5000:5000` 将容器的 5000 端口映射到主机的 5000 端口
+- `-e TZ=Asia/Shanghai` 设置时区（可选，默认为 Asia/Shanghai）
+- `-e PORT=5000` 设置应用运行端口（可选，默认为 5000）
+- `-v /var/app/config:/opt/sms-code-sync/config.json` 挂载配置文件
+
+注意：由于配置文件在运行目录的根目录，如果挂载整个目录会导致程序无法运行，所以需要单独挂载配置文件。
+
 #### 手动部署
 
 1. 安装 Python 运行环境
