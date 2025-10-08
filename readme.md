@@ -69,7 +69,7 @@ docker run -d \
   - 默认情况下，需要确保此环境变量设置的端口与 `-p` 参数映射的端口一致
   - 如果使用 `--network=host` 模式运行容器，则此端口设置应与系统实际开放的端口对应
 
-- `-v /var/app/config:/opt/sms-code-sync/config.json` 挂载配置文件
+- `-v /opt/sms-code-sync/config.json:/var/app/config.json` 挂载配置文件，冒号前的是你的配置文件路径（此处以 `/opt/sms-code-sync/config.json` 为例），冒号后的是在容器中的位置，如果你没有移动过容器的文件，请不要更改，这会导致程序无法获取到正确的配置。
 
 注意：由于配置文件在运行目录的根目录，如果挂载整个目录会导致程序无法运行，所以需要单独挂载配置文件。
 
