@@ -47,7 +47,7 @@ docker run -d \
   -e TZ=Asia/Shanghai \
   -e PORT=5000 \
   -v /var/app/config:/opt/sms-code-sync/config.json \
-  ghcr.io/你的用户名/sms-code-sync:latest
+  ghcr.io/hxabcd/sms-code-sync:latest
 ```
 
 参数说明：
