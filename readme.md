@@ -12,9 +12,9 @@ SMS Code Sync 为了解决**远程接收验证码**的困难应运而生。本�
 
 本项目使用 Python Flask 编写。你可以通过像 Zeabur 这一类的平台快速部署（需要服务器），或者手动部署在你自己的服务器/设备上。
 
-~更多验证方式什么的，在做了在做了~
+~~更多验证方式什么的，在做了在做了~~
 
-~至于PC端，还在新建文件夹（~
+~~至于PC端，还在新建文件夹（~~
 
 ## 使用
 
@@ -22,7 +22,56 @@ SMS Code Sync 为了解决**远程接收验证码**的困难应运而生。本�
 
 #### 使用平台快速部署
 
-Fork 本仓库（记得设为 Private），并修改好配置文件，然后在对应平台选择你的仓库进行部署。
+Fork 本仓库，并修改好配置文件，然后在对应平台选择你的仓库进行部署。
+
+#### 使用 Docker 部署
+
+你也可以使用 Docker 来部署本应用。~~镜像中已包含 Gunicorn 作为 WSGI 服务器，用于生产环境部署~~有点问题，先删掉了。首先从 GHCR 拉取镜像：
+
+```bash
+# 从 GHCR 拉取镜像
+docker pull ghcr.io/hxabcd/sms-code-sync:latest
+
+# 如果你的网络连接 GHCR 很慢，可以从南京大学镜像站拉取
+docker pull ghcr.nju.edu.cn/hxabcd/sms-code-sync:latest
+```
+
+然后运行容器，需要设置环境变量并挂载配置文件：
+
+```bash
+# 如果你从 GHCR 拉取镜像，请使用 `ghcr.io/hxabcd/sms-code-sync:latest`：
+docker run -d \
+  --name SMS-Code-Sync \
+  -p 5000:5000 \
+  -e TZ=Asia/Shanghai \
+  -e PORT=5000 \
+  -v /opt/sms-code-sync/config.json:/var/app/config.json \
+  ghcr.io/hxabcd/sms-code-sync:latest
+
+  # 如果你从南京大学镜像站拉取镜像，请使用 `ghcr.nju.edu.cn/hxabcd/sms-code-sync:latest`：
+docker run -d \
+  --name SMS-Code-Sync \
+  -p 5000:5000 \
+  -e TZ=Asia/Shanghai \
+  -e PORT=5000 \
+  -v /opt/sms-code-sync/config.json:/var/app/config.json \
+  ghcr.nju.edu.cn/hxabcd/sms-code-sync:latest
+```
+
+参数说明：
+- `-p 5000:5000` 将容器的 5000 端口映射到主机的 5000 端口
+
+- `-e TZ=Asia/Shanghai` 设置时区（可选，默认为 Asia/Shanghai）
+
+- `-e PORT=5000` 设置应用运行端口（可选，默认为 5000）
+
+  **端口配置说明：**
+  - 默认情况下，需要确保此环境变量设置的端口与 `-p` 参数映射的端口一致
+  - 如果使用 `--network=host` 模式运行容器，则此端口设置应与系统实际开放的端口对应
+
+- `-v /opt/sms-code-sync/config.json:/var/app/config.json` 挂载配置文件，冒号前的是你的配置文件路径（此处以 `/opt/sms-code-sync/config.json` 为例），冒号后的是在容器中的位置，如果你没有移动过容器的文件，请不要更改，这会导致程序无法获取到正确的配置。
+
+注意：由于配置文件在运行目录的根目录，如果挂载整个目录会导致程序无法运行，所以需要单独挂载配置文件。
 
 #### 手动部署
 
@@ -45,10 +94,10 @@ Fork 本仓库（记得设为 Private），并修改好配置文件，然后在�
 ```json5
 {
     "regex": {
-        "code": "\\d{4,8}", // 从短信内容中匹配验证码的正则表达式
-        "sender": "[\\[【](.*?)[\\]】]" // 从短信内容中匹配发送者的正则表达式
+        "code": "\\d{4,8}", /* 从短信内容中匹配验证码的正则表达式 */
+        "sender": "[\\[【](.*?)[\\]】]" /* 从短信内容中匹配发送者的正则表达式 */
     },
-    "mail_providers": [ // 邮件验证码的发送源（包名）
+    "mail_providers": [ /* 邮件验证码的发送源（包名） */
         "com.android.email", 
         "com.microsoft.office.outlook",
         "com.google.android.gm",
@@ -56,12 +105,12 @@ Fork 本仓库（记得设为 Private），并修改好配置文件，然后在�
         "com.tencent.androidqqmail",
         "net.thunderbird.android"
     ],
-    "profiles": [ // 用户档案，可存在多个
+    "profiles": [ /* 用户档案，可存在多个 */
         {
-            "name": "NAME", // 档案名
-            "secret": "TOTP_SECRET", // TOTP 密钥
-            "window": 180, // 单次登录有效窗口时长
-            "maxlen": 3 // 最大同时存储的验证码条数
+            "name": "NAME", /* 档案名 */
+            "secret": "TOTP_SECRET", /* TOTP 密钥 */
+            "window": 180, /* 单次登录有效窗口时长 */
+            "maxlen": 3 /* 最大同时存储的验证码条数 */
         }
     ]
 }

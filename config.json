@@ -2,7 +2,7 @@
     "regex": {
         "code": "\\d{4,8}",
         "sender": "[\\[【](.*?)[\\]】]"
-    }
+    },
     "mail_providers": [
         "com.android.email", 
         "com.microsoft.office.outlook",
