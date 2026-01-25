@@ -1,4 +1,4 @@
-import logging
+
 
 from flask import Flask
 from flask_cors import CORS
@@ -18,7 +18,9 @@ def create_app(config_class=None):
     CORS(app, supports_credentials=True)
 
     # Initialize logging
-    logging.basicConfig(level=logging.INFO)
+    from app.utils.logger import setup_logger
+
+    setup_logger(debug=app.config.get("DEBUG", False))
     
     # Import and register blueprints
     from app.routes.api import api_bp

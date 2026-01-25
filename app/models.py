@@ -65,7 +65,9 @@ def init_profiles():
         secret = env_secret or item.get("secret")
 
         if not secret:
-            print(f"Warning: No secret found for profile {name}. Skipping.")
+            from loguru import logger
+
+            logger.warning(f"No secret found for profile {name}. Skipping.")
             continue
 
         window = item.get("window", 180)

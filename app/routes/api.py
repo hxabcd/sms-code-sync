@@ -3,6 +3,7 @@ from functools import wraps
 from uuid import uuid4 as uuid_gen
 
 from flask import Blueprint, Response, jsonify, request
+from loguru import logger
 
 from app.config import config
 from app.models import profiles
@@ -93,6 +94,7 @@ def verify_session(name):
         return jsonify({"error": "Token required"}), 400
 
     if profile.verify(uuid, token):
+        logger.info(f"Session verified successfully for profile: {name}, uuid: {uuid}")
         response = jsonify(
             {"message": "Verified successfully", "remaining": profile.window}
         )
@@ -105,6 +107,7 @@ def verify_session(name):
             samesite="Lax",
         )
         return response
+    logger.warning(f"Invalid verification attempt for profile: {name}, uuid: {uuid}")
     return jsonify({"error": "Invalid token"}), 403
 
 
@@ -117,6 +120,7 @@ def logout_session(name):
 
     uuid = get_uuid(request)
     profile.last_verified.pop(uuid, None)
+    logger.info(f"User logged out from profile: {name}, uuid: {uuid}")
     return jsonify({"message": "Logged out"})
 
 
@@ -165,8 +169,12 @@ def submit_message(name):
 
     result, error = MessageService.process_message(profile, data)
     if error:
+        logger.error(f"Failed to process message for profile {name}: {error}")
         return jsonify({"error": error}), 400
 
+    logger.success(
+        f"Message processed for profile {name}: {result['code']} from {result['sender']}"
+    )
     return jsonify({"message": "Processed", "data": result})
 
 
