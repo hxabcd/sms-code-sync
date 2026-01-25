@@ -25,12 +25,20 @@ class Profile:
         self.codes = deque(maxlen=self.maxlength)
 
     def check_verified(self, uuid: str):
-        """检查 UUID 是否已验证"""
+        """检查 UUID 是否已验证并返回 (是否验证, 剩余秒数)"""
         last_verified_time = self.last_verified.get(uuid)
         if not last_verified_time:
-            return False
+            return False, 0
+
         current_time = int(time.time())
-        return (current_time - last_verified_time) < self.window
+        elapsed = current_time - last_verified_time
+        remaining = self.window - elapsed
+
+        if remaining <= 0:
+            self.last_verified.pop(uuid, None)
+            return False, 0
+
+        return True, remaining
 
     def verify(self, uuid: str, token: str):
         """验证 TOTP 并记录"""

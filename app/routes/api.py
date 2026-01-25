@@ -12,6 +12,11 @@ from app.services.message_service import MessageService
 api_bp = Blueprint("api", __name__, url_prefix="/api")
 
 
+@api_bp.errorhandler(400)
+def handle_bad_request(e):
+    return jsonify({"error": "Bad Request", "message": str(e.description)}), 400
+
+
 def require_api_key(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -41,13 +46,14 @@ def check_session(name):
         return jsonify({"error": "Profile not found"}), 404
 
     uuid = get_uuid(request)
-    is_verified = profile.check_verified(uuid)
+    is_verified, remaining = profile.check_verified(uuid)
 
     response = jsonify(
         {
             "status": "Verified" if is_verified else "Not verified",
             "verified": is_verified,
             "uuid": uuid,
+            "remaining": remaining,
         }
     )
 
@@ -72,16 +78,24 @@ def verify_session(name):
     uuid = get_uuid(request)
 
     # Avoid redundant verification if already verified
-    if profile.check_verified(uuid):
-        return jsonify({"message": "Already verified"}), 200
+    is_verified, remaining = profile.check_verified(uuid)
+    if is_verified:
+        return jsonify({"message": "Already verified", "remaining": remaining}), 200
 
     data = request.get_json()
+    if data is None:
+        return jsonify(
+            {"error": "Bad Request", "message": "Missing or invalid JSON body"}
+        ), 400
+
     token = data.get("token")
     if not token:
         return jsonify({"error": "Token required"}), 400
 
     if profile.verify(uuid, token):
-        response = jsonify({"message": "Verified successfully"})
+        response = jsonify(
+            {"message": "Verified successfully", "remaining": profile.window}
+        )
         response.set_cookie(
             "uuid",
             value=uuid,
@@ -113,7 +127,8 @@ def get_codes(name):
     if not profile:
         return jsonify({"error": "Profile not found"}), 404
 
-    if not profile.check_verified(get_uuid(request)):
+    is_verified, _ = profile.check_verified(get_uuid(request))
+    if not is_verified:
         return jsonify({"error": "Forbidden"}), 403
 
     return jsonify({"codes": list(profile.codes)})
@@ -126,7 +141,8 @@ def clear_codes(name):
     if not profile:
         return jsonify({"error": "Profile not found"}), 404
 
-    if not profile.check_verified(get_uuid(request)):
+    is_verified, _ = profile.check_verified(get_uuid(request))
+    if not is_verified:
         return jsonify({"error": "Forbidden"}), 403
 
     profile.codes.clear()
@@ -138,6 +154,11 @@ def clear_codes(name):
 def submit_message(name):
     """Submit a new message (Requires API Key)."""
     data = request.get_json()
+    if data is None:
+        return jsonify(
+            {"error": "Bad Request", "message": "Missing or invalid JSON body"}
+        ), 400
+
     profile = profiles.get(name)
     if not profile:
         return jsonify({"error": "Profile not found"}), 404
