@@ -1,0 +1,15 @@
+.git
+.github
+.venv
+node_modules
+__pycache__
+*.pyc
+.vscode
+config.json
+config copy.json
+frontend/node_modules
+frontend/dist
+README.md
+readme.md
+Dockerfile
+.dockerignore

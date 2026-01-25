@@ -5,7 +5,7 @@ import os
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY") or "you-will-never-guess"
     DEBUG = False
-    PORT = int(os.environ.get("PORT", 5000))
+    PORT = int(os.environ.get("PORT", 5074))
 
     def __init__(self):
         self.load_from_json()
