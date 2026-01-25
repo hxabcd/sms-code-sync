@@ -1,4 +1,5 @@
 {
+    "api_key": "YOUR_API_KEY_HERE",
     "regex": {
         "code": "\\d{4,8}",
         "sender": "[\\[【](.*?)[\\]】]"
