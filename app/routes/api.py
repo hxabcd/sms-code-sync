@@ -56,7 +56,7 @@ def check_session(name):
         value=uuid,
         max_age=7 * 24 * 3600,
         httponly=True,
-        secure=True,
+        secure=request.is_secure,
         samesite="Lax",
     )
     return response
@@ -65,16 +65,21 @@ def check_session(name):
 @api_bp.route("/profiles/<name>/session", methods=["POST"])
 def verify_session(name):
     """Verify TOTP token and create a session."""
-    data = request.get_json()
     profile = profiles.get(name)
     if not profile:
         return jsonify({"error": "Profile not found"}), 404
 
+    uuid = get_uuid(request)
+
+    # Avoid redundant verification if already verified
+    if profile.check_verified(uuid):
+        return jsonify({"message": "Already verified"}), 200
+
+    data = request.get_json()
     token = data.get("token")
     if not token:
         return jsonify({"error": "Token required"}), 400
 
-    uuid = get_uuid(request)
     if profile.verify(uuid, token):
         response = jsonify({"message": "Verified successfully"})
         response.set_cookie(
@@ -82,7 +87,7 @@ def verify_session(name):
             value=uuid,
             max_age=7 * 24 * 3600,
             httponly=True,
-            secure=True,
+            secure=request.is_secure,
             samesite="Lax",
         )
         return response
