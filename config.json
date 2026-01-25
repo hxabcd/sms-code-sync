@@ -5,7 +5,7 @@
         "sender": "[\\[【](.*?)[\\]】]"
     },
     "mail_providers": [
-        "com.android.email", 
+        "com.android.email",
         "com.microsoft.office.outlook",
         "com.google.android.gm",
         "com.netease.mail",
