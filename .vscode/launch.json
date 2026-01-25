@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Flask (Auto-build Frontend)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "preLaunchTask": "Build Frontend",
+            "env": {
+                "FLASK_APP": "main.py",
+                "FLASK_DEBUG": "1"
+            },
+            "justMyCode": true
+        }
+    ]
+}

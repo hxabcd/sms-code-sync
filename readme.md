@@ -55,28 +55,28 @@ docker pull ghcr.nju.edu.cn/hxabcd/sms-code-sync:latest
 # 如果你从 GHCR 拉取镜像，请使用 `ghcr.io/hxabcd/sms-code-sync:latest`：
 docker run -d \
   --name SMS-Code-Sync \
-  -p 5000:5000 \
+  -p 5074:5074 \
   -e TZ=Asia/Shanghai \
-  -e PORT=5000 \
+  -e PORT=5074 \
   -v /opt/sms-code-sync/config.json:/var/app/config.json \
   ghcr.io/hxabcd/sms-code-sync:latest
 
   # 如果你从南京大学镜像站拉取镜像，请使用 `ghcr.nju.edu.cn/hxabcd/sms-code-sync:latest`：
 docker run -d \
   --name SMS-Code-Sync \
-  -p 5000:5000 \
+  -p 5074:5074 \
   -e TZ=Asia/Shanghai \
-  -e PORT=5000 \
+  -e PORT=5074 \
   -v /opt/sms-code-sync/config.json:/var/app/config.json \
   ghcr.nju.edu.cn/hxabcd/sms-code-sync:latest
 ```
 
 参数说明：
-- `-p 5000:5000` 将容器的 5000 端口映射到主机的 5000 端口
+- `-p 5074:5074` 将容器的 5074 端口映射到主机的 5074 端口
 
 - `-e TZ=Asia/Shanghai` 设置时区（可选，默认为 Asia/Shanghai）
 
-- `-e PORT=5000` 设置应用运行端口（可选，默认为 5000）
+- `-e PORT=5074` 设置应用运行端口（可选，默认为 5074）
 
   **端口配置说明：**
   - 默认情况下，需要确保此环境变量设置的端口与 `-p` 参数映射的端口一致
@@ -151,9 +151,31 @@ python launcher.py
 
 ## 开发
 
-使用 **Python 3.13+** 开发。项目采用以下结构：
+### 目录结构
 - `/app`: 核心包
     - `/routes`: API 与 Web 路由
     - `/services`: 业务逻辑 (Message/SSE)
     - `/models`: 数据结构
-- `/templates` & `/static`: 前端资源
+- `/frontend`: 前端
+- `/main.py`: 项目入口
+
+### 前端开发与构建
+项目前端采用了 React 框架，需要构建后才能集成到 Flask 中。
+
+1. **安装依赖**:
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+2. **开发模式**:
+   ```bash
+   npm run dev
+   ```
+
+3. **生产构建**:
+   ```bash
+   npm run build
+   ```
+   构建产物将存放在 `frontend/dist` 目录下，Flask 会自动加载该目录下的文件。
+

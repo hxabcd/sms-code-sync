@@ -5,8 +5,13 @@ from flask_cors import CORS
 
 
 def create_app(config_class=None):
-    app = Flask(__name__, template_folder='../templates', static_folder='../static')
-    
+    app = Flask(
+        __name__,
+        template_folder="../frontend/dist",
+        static_folder="../frontend/dist",
+        static_url_path="/",
+    )
+
     if config_class:
         app.config.from_object(config_class)
 
