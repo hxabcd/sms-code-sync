@@ -10,6 +10,12 @@ SMS Code Sync 旨在解决**远程接收验证码**的困难。通过手机端�
 - **安全性**：支持 TOTP 身份验证及 API Key 保护。
 - **模块化架构**：基于 Flask 工厂模式，易于扩展和维护。
 
+**界面截图：**
+
+![AuthPage](https://github.com/user-attachments/assets/bd4bd747-7959-413a-a1b8-7de15cd68486)
+
+![ViewPage](https://github.com/user-attachments/assets/8086e5d7-b0cf-41aa-b061-4e70bb2cd3bc)
+
 ## 快速开始
 
 ### 服务端部署
