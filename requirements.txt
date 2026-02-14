@@ -1,5 +1,11 @@
 Flask==3.1.0
 Flask-Cors==5.0.0
+Flask-Limiter==3.8.0
+Flask-Talisman==1.1.0
+pydantic==2.10.5
 pyotp==2.9.0
 gunicorn==23.0.0
 loguru==0.7.2
+pytest==8.3.4
+pytest-asyncio==0.25.1
+ruff==0.9.3

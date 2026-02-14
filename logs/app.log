@@ -4,3 +4,87 @@
  * Running on http://28.0.0.1:5074
 2026-01-25 16:50:44 | INFO     | logging:callHandlers:1737 - [33mPress CTRL+C to quit[0m
 2026-01-25 16:50:49 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [25/Jan/2026 16:50:49] "GET /health HTTP/1.1" 200 -
+2026-02-14 16:03:30 | INFO     | logging:callHandlers:1737 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5074
+ * Running on http://28.0.0.1:5074
+2026-02-14 16:03:30 | INFO     | logging:callHandlers:1737 - [33mPress CTRL+C to quit[0m
+2026-02-14 16:03:36 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:03:36] "GET /?ide_webview_request_time=1771056216693 HTTP/1.1" 200 -
+2026-02-14 16:03:36 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:03:36] "GET /assets/vendor-DfeKkMyH.js HTTP/1.1" 200 -
+2026-02-14 16:03:36 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:03:36] "GET /assets/ui-BpXycoGf.js HTTP/1.1" 200 -
+2026-02-14 16:03:36 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:03:36] "GET /assets/index-CMLTB7c4.js HTTP/1.1" 200 -
+2026-02-14 16:03:36 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:03:36] "GET /assets/index-BIrjGZ58.css HTTP/1.1" 200 -
+2026-02-14 16:03:36 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:03:36] "GET /api/profiles HTTP/1.1" 200 -
+2026-02-14 16:03:36 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:03:36] "[33mGET /@vite/client HTTP/1.1[0m" 404 -
+2026-02-14 16:03:36 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:03:36] "GET /api/profiles/PROFILE_NAME/session HTTP/1.1" 200 -
+2026-02-14 16:03:36 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:03:36] "GET /api/profiles HTTP/1.1" 200 -
+2026-02-14 16:03:55 | ERROR    | logging:callHandlers:1737 - Exception on /api/profiles/PROFILE_NAME/session [POST]
+Traceback (most recent call last):
+
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 1014, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 1043, in _bootstrap_inner
+    self.run()
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 994, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\site-packages\werkzeug\serving.py", line 398, in handle
+    super().handle()
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\http\server.py", line 424, in handle_one_request
+    method()
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\site-packages\werkzeug\serving.py", line 370, in run_wsgi
+    execute(self.server.app)
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\site-packages\werkzeug\serving.py", line 331, in execute
+    application_iter = app(environ, start_response)
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+> File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask_cors\extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+
+  File "D:\MyPC\Advanced\Websites\sms-code-sync\app\routes\api.py", line 95, in verify_session
+    if profile.verify(uuid, validated.token):
+
+  File "D:\MyPC\Advanced\Websites\sms-code-sync\app\models.py", line 45, in verify
+    if self.totp.verify(token):
+
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\site-packages\pyotp\totp.py", line 84, in verify
+    return utils.strings_equal(str(otp), str(self.at(for_time)))
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\site-packages\pyotp\totp.py", line 56, in at
+    return self.generate_otp(self.timecode(for_time) + counter_offset)
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\site-packages\pyotp\otp.py", line 35, in generate_otp
+    hasher = hmac.new(self.byte_secret(), self.int_to_bytestring(input), self.digest)
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\site-packages\pyotp\otp.py", line 52, in byte_secret
+    return base64.b32decode(secret, casefold=True)
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\base64.py", line 252, in b32decode
+    return _b32decode(_b32alphabet, s, casefold, map01)
+  File "C:\Users\AbCd\AppData\Local\Programs\Python\Python313\Lib\base64.py", line 234, in _b32decode
+    raise binascii.Error('Non-base32 digit found') from None
+
+binascii.Error: Non-base32 digit found
+2026-02-14 16:03:55 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:03:55] "[35m[1mPOST /api/profiles/PROFILE_NAME/session HTTP/1.1[0m" 500 -
+2026-02-14 16:04:18 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:04:18] "[36mGET /assets/index-BIrjGZ58.css HTTP/1.1[0m" 304 -
+2026-02-14 16:05:28 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:05:28] "GET /?ide_webview_request_time=1771056216693 HTTP/1.1" 200 -
+2026-02-14 16:05:28 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:05:28] "GET /?ide_webview_request_time=1771056216693 HTTP/1.1" 200 -
+2026-02-14 16:05:28 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:05:28] "[36mGET /assets/index-CMLTB7c4.js HTTP/1.1[0m" 304 -
+2026-02-14 16:05:28 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:05:28] "[36mGET /assets/index-BIrjGZ58.css HTTP/1.1[0m" 304 -
+2026-02-14 16:05:28 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:05:28] "[36mGET /assets/ui-BpXycoGf.js HTTP/1.1[0m" 304 -
+2026-02-14 16:05:28 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:05:28] "[36mGET /assets/vendor-DfeKkMyH.js HTTP/1.1[0m" 304 -
+2026-02-14 16:05:28 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:05:28] "GET /api/profiles HTTP/1.1" 200 -
+2026-02-14 16:05:28 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:05:28] "GET /api/profiles/PROFILE_NAME/session HTTP/1.1" 200 -
+2026-02-14 16:05:28 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:05:28] "GET /api/profiles HTTP/1.1" 200 -
+2026-02-14 16:05:28 | INFO     | logging:callHandlers:1737 - 127.0.0.1 - - [14/Feb/2026 16:05:28] "[33mGET /@vite/client HTTP/1.1[0m" 404 -
